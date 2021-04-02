@@ -15,7 +15,7 @@
             {{ this.series }}
         </v-row>
         <v-row justify="center">
-            <v-expansion-panels class="mt-10"
+            <v-expansion-panels class="my-10"
                 style="max-width:500px"
             >
                 <v-expansion-panel
@@ -34,9 +34,24 @@
                         </template>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
-                        <div style="color:white;font-size:25px">
+                        <div
+                            class="mb-5"
+                            style="color:white;font-size:25px"
+                        >
                             Episodios
                         </div>
+                        <v-row
+                            class="my-2 pl-5"
+                            v-for="(episode, i) in seasonEpisodes[season]"
+                            :key="i"
+                        >
+                            <div style="color:grey">
+                                {{ episode.number }}
+                            </div>
+                            <div class="ml-10" style="color:white">
+                                {{ episode.title }}
+                            </div>
+                        </v-row>
                     </v-expansion-panel-content>
                 </v-expansion-panel>
             </v-expansion-panels>
@@ -50,7 +65,7 @@ export default {
     data: () => ({
         loading: true,
         seasons: [],
-        seasonEpisodes: [],
+        seasonEpisodes: {},
     }),
     computed: {
         series() {
