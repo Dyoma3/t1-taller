@@ -1,5 +1,5 @@
 <template>
-    <v-container >
+    <v-container class="d-flex flex-column align-center">
         <v-overlay v-if="loading" fixed>
             <v-progress-circular
                 :size="70"
@@ -14,48 +14,55 @@
         >
             {{ this.series }}
         </v-row>
-        <v-row justify="center">
-            <v-expansion-panels class="my-10"
-                style="max-width:500px"
+
+        <v-expansion-panels class="my-10"
+            style="max-width:500px"
+        >
+            <v-expansion-panel
+                v-for="(season, i) in seasons"
+                :key="i"
+                style="background-color:#0e0e0e;max-width:500px;"
             >
-                <v-expansion-panel
-                    v-for="(season, i) in seasons"
-                    :key="i"
-                    style="background-color:#0e0e0e;max-width:500px;"
-                >
-                    <v-expansion-panel-header style="color:white">
-                        <v-row justify="center" style="font-size:19px">
-                            Temporada {{ season }}
-                        </v-row>
-                        <template v-slot:actions>
-                            <v-icon color="white">
-                                mdi-menu-down
-                            </v-icon>
-                        </template>
-                    </v-expansion-panel-header>
-                    <v-expansion-panel-content>
-                        <div
-                            class="mb-5"
-                            style="color:white;font-size:25px"
-                        >
-                            Episodios
-                        </div>
+                <v-expansion-panel-header style="color:white">
+                    <v-row justify="center" style="font-size:19px">
+                        Temporada {{ season }}
+                    </v-row>
+                    <template v-slot:actions>
+                        <v-icon color="white">
+                            mdi-menu-down
+                        </v-icon>
+                    </template>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                    <div
+                        class="mb-5"
+                        style="color:white;font-size:25px"
+                    >
+                        Episodios
+                    </div>
+                    <div
+                        v-for="(episode, i) in seasonEpisodes[season]"
+                        :key="i"
+                    >
+                        <v-divider style="border-color: grey"/>
                         <v-row
+                            @click="navigate(episode.id)"
                             class="my-2 pl-5"
-                            v-for="(episode, i) in seasonEpisodes[season]"
-                            :key="i"
+                            style="cursor:pointer"
                         >
-                            <div style="color:grey">
+                            <div style="color:grey;">
                                 {{ episode.number }}
                             </div>
-                            <div class="ml-10" style="color:white">
+                            <div :class="[parseInt(episode.number, 10) >= 10 ? 'ml-8' : 'ml-10']"
+                            style="color:white">
                                 {{ episode.title }}
                             </div>
                         </v-row>
-                    </v-expansion-panel-content>
-                </v-expansion-panel>
-            </v-expansion-panels>
-        </v-row>
+                    </div>
+                    
+                </v-expansion-panel-content>
+            </v-expansion-panel>
+        </v-expansion-panels>
     </v-container>
 </template>
 <script>
@@ -72,6 +79,12 @@ export default {
             return this.$route.name
         },
     },
+    methods: {
+        navigate(episode_id) {
+            console.log(episode_id)
+            this.$router.push(`episode/${episode_id}`);
+        },
+    },
     created() {
         const seriesParameter = this.series === 'Breaking Bad'
             ? 'Breaking+Bad'
@@ -85,8 +98,8 @@ export default {
                 if (!this.seasons.includes(item.season)) {
                     this.seasons.push(item.season);
                     this.seasonEpisodes[item.season] = [{
-                        title: item.episode_id,
-                        id: item.id,
+                        id: item.episode_id,
+                        title: item.title,
                         number: item.episode
                     }];
                 } else {
@@ -97,7 +110,6 @@ export default {
                     })
                 }
             });
-            console.log(this.seasons);
         })
         .catch((error) => {
             console.log(error);
