@@ -18,7 +18,7 @@
             v-if="episodeData"
             style="background-color:#0e0e0e"
         >
-            <v-container class="pa-6" style="width:500px"> 
+            <v-container class="pa-6" style="max-width:500px; position:relative"> 
                 <v-row>
                     <div class="subtitle mr-2">
                         Temporada:
@@ -44,13 +44,13 @@
                     </div>
                 </v-row>
 
-                <v-row>
-                    <v-col cols="6" class="subtitle pa-0 mr-2">
+                <v-row style="width:100%">
+                    <v-col cols="12" class="subtitle pa-0">
                         Personajes:
                     </v-col>
-                    <v-col cols="6" class="d-flex flex-column align-center"
+                    <v-col class="d-flex justify-center col-md-6 col-12"
                         v-for="(character, i) in episodeData.characters"
-                            :key="i"
+                        :key="i"
                     >
                         <v-hover 
                             v-slot="{ hover }"    
