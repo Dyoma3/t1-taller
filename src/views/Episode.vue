@@ -117,7 +117,15 @@
                         />
                     </v-overlay>
                 </v-row>
-                <div v-if="selectedCharacterData && !loadingCharacter" class="d-flex flex-column pa-5">
+                <v-row
+                    v-if="characterError"
+                    style="height: 300px;position:relative"
+                    class="subtitle justify-center align-center"
+                >
+                    No se han podido cargar los datos
+                </v-row>
+                <div v-if="selectedCharacterData && !loadingCharacter && !characterError"
+                class="d-flex flex-column pa-5">
                     <v-row>
                         <div class="subtitle mr-2">
                             Nickname:
@@ -237,6 +245,7 @@ export default {
         selectedCharacter: null,
         characterVisible: false,
         selectedCharacterData: null,
+        characterError: false,
     }),
     computed: {
         date() {
@@ -262,6 +271,7 @@ export default {
     },
     methods: {
         openCharacter(character) {
+            this.characterError = false;
             this.selectedCharacter = character;
             this.characterVisible = true;
             this.loadingCharacter = true;
@@ -270,17 +280,20 @@ export default {
                 url: `https://tarea-1-breaking-bad.herokuapp.com/api/characters/?name=${character}`,
             })
             .then((result) => {
-                this.selectedCharacterData = result.data[0];
+                if (result.data.length === 0) {
+                    this.characterError = true;
+                } else {
+                    this.selectedCharacterData = result.data[0];
+                }
             })
             .catch(() => {
-                this.characterVisible = false;
+                this.characterError = true;
             })
             .finally(() => {
                 this.loadingCharacter = false;
             });
         },
         navigateBreakingBad(season) {
-            console.log(season);
             this.$router.push({ name: 'Breaking Bad', params: { season } });
         },
         navigateBetterCallSaul(season) {
