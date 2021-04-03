@@ -264,6 +264,7 @@ export default {
         openCharacter(character) {
             this.selectedCharacter = character;
             this.characterVisible = true;
+            this.loadingCharacter = true;
             axios({
                 method: 'get',
                 url: `https://tarea-1-breaking-bad.herokuapp.com/api/characters/?name=${character}`,

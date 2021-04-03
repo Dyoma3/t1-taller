@@ -7,6 +7,7 @@ import Episode from '../views/Episode';
 Vue.use(VueRouter);
 
 const router = new VueRouter({
+  mode: 'history',
   routes: [
     {
       path: '/',
