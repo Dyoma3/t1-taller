@@ -8,13 +8,14 @@
     >
       <div
         @click="navigate"
-        class="ml-10"
-        style="color: #e50914;font-size: 40px;font-weight:500;cursor:pointer"
+        :class="[$vuetify.breakpoint.xs
+        ? 'ml-3' : 'ml-10', $vuetify.breakpoint.xs
+        ? 'mobile-title': 'standard-title']"
       >
         TAREA 1
       </div>
       <v-spacer/>
-      <div class="d-flex ml-6 mt-7">
+      <!-- <div class="d-flex ml-6 mt-7">
         <v-text-field
           class="ma-0 pa-0"
           v-model="character"
@@ -37,8 +38,24 @@
         >
           Buscar
         </v-btn>
-      </div>
+      </div> -->
+      
+      <v-autocomplete
+        ref="lala"
+        dense
+        :no-data-text="loading ? 'Cargando...' : 'No hay personajes con este nombre'"
+        :hide-no-data="searchValue === ''"
+        color="#e50914"
+        placeholder="Buscar personaje"
+        outlined
+        :class="[$vuetify.breakpoint.xs ? 'mr-2' : 'mr-7', 'mt-5']"
+        v-model="character"
+        :items="candidates"
+        :style="{maxWidth: $vuetify.breakpoint.xs ? '200px' : '400px'}"
+        @update:search-input="changeSearchValue"
+      >
 
+      </v-autocomplete>
     </v-app-bar>
 
     <v-main style="background-color:#2b2727">
@@ -52,9 +69,15 @@
 export default {
   name: 'App',
   data: () => ({
+    loading: false,
     character: '',
+    candidates: [],
+    searchValue: '',
   }),
   methods: {
+    changeSearchValue(value) {
+      this.searchValue = value;
+    },
     navigate() {
       if (!(this.$route.path === '/')) {
         this.$router.push('/');
@@ -68,13 +91,24 @@ export default {
         },
       }).catch(() => {});
     },
+    searchCharacterApi() {
+
+    },
   }
 };
 </script>
 
 <style scoped>
-.title{
+.standard-title {
   color: #e50914;
-  font-size: 60px;
+  font-size: 40px;
+  font-weight:500;
+  cursor:pointer;
+}
+.mobile-title {
+  color: #e50914;
+  font-size: 24px;
+  font-weight:500;
+  cursor:pointer;
 }
 </style>
