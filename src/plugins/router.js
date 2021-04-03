@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '../views/Home';
 import Series from '../views/Series';
 import Episode from '../views/Episode';
+import Character from '../views/Character';
 
 Vue.use(VueRouter);
 
@@ -28,9 +29,14 @@ const router = new VueRouter({
     },
     {
       path: '/episode/:id',
-      name: 'episode',
+      name: 'Episode',
       component: Episode,
     },
+    {
+      path: '/character/:name',
+      name: 'Character',
+      component: Character,
+    }
   ],
 });
 
