@@ -17,6 +17,8 @@
       <v-spacer/>
     
       <v-autocomplete
+        ref="autocomplete"
+        rounded
         dense
         :loading="loading"
         :no-data-text="loading ? 'Cargando...' : 'No hay personajes con este nombre'"
@@ -30,7 +32,7 @@
         item-text="name"
         item-value="name"
         :style="{maxWidth: $vuetify.breakpoint.xs ? '180px' : '400px'}"
-        @update:search-input="searchCharacter"
+        @update:search-input="searchValue = $event"
       >
         <template v-slot:item="data">
           <template>
@@ -61,7 +63,7 @@ export default {
     loading: false,
     character: '',
     candidates: [],
-    searchValue: '',
+    searchValue: ',a,a',
   }),
   methods: {
     navigate() {
@@ -69,8 +71,9 @@ export default {
         this.$router.push('/');
       }
     },
-    searchCharacter: _.debounce(function (value) {
-      this.searchValue = value;
+  },
+  watch: {
+    searchValue: _.debounce(function (value) {
       if (!value || value === '') {
         this.candidates = [];
         return;
@@ -89,15 +92,20 @@ export default {
         this.loading = false;
       });
     }, 500),
-  },
-  watch: {
+
     character() {
-      this.$router.push({
-        name: 'Character',
-        params: {
-          name: this.character,
-        },
-      }).catch(() => {});
+      if (this.character && this.character !== '') {
+        this.$router.push({
+          name: 'Character',
+          params: {
+            name: this.character,
+          },
+        }).then(() => {
+          this.character = '';
+          this.$refs.autocomplete.internalSearch = '';
+        })
+        .catch(() => {});
+      }
     },
   },
 };

@@ -14,6 +14,13 @@
         >
             {{ series }}
         </v-row>
+        <v-row
+            v-if="error"
+            class="justify-center mt-7"
+            style="color:grey;font-size:27px"
+        >
+            Ha habido un error al cargar los datos, intente de nuevo
+        </v-row>
 
         <v-expansion-panels
             v-model="panel"
@@ -73,6 +80,7 @@ import axios from 'axios';
 export default {
     props: ['season'],
     data: () => ({
+        error: false,
         loading: true,
         seasons: [],
         seasonEpisodes: {},
@@ -117,8 +125,8 @@ export default {
                 this.panel = this.$route.params.season - 1;
             }
         })
-        .catch((error) => {
-            console.log(error);
+        .catch(() => {
+            this.error = true;
         })
         .finally(() => {
             this.loading = false;
