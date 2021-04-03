@@ -162,7 +162,7 @@
                         >
                             <a
                                 class="mr-2"
-                                @click="openCharacter(character)"
+                                @click="navigateBreakingBad(season)"
                                 :style="{
                                     textTransform: 'none',
                                     textAlign: 'center',
@@ -190,7 +190,7 @@
                         >
                             <a
                                 class="mr-2"
-                                @click="openCharacter(character)"
+                                @click="navigateBetterCallSaul(season)"
                                 :style="{
                                     textTransform: 'none',
                                     textAlign: 'center',
@@ -270,7 +270,6 @@ export default {
             })
             .then((result) => {
                 this.selectedCharacterData = result.data[0];
-                console.log(result.data[0]);
             })
             .catch(() => {
                 this.characterVisible = false;
@@ -278,6 +277,13 @@ export default {
             .finally(() => {
                 this.loadingCharacter = false;
             });
+        },
+        navigateBreakingBad(season) {
+            console.log(season);
+            this.$router.push({ name: 'Breaking Bad', params: { season } });
+        },
+        navigateBetterCallSaul(season) {
+            this.$router.push({ name: 'Better Call Saul', params: { season } })
         },
     },
 

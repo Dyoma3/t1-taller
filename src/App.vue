@@ -6,8 +6,9 @@
       dark
     >
       <div
+        @click="navigate"
         class="ml-10"
-        style="color: #e50914;font-size: 40px;font-weight:500"
+        style="color: #e50914;font-size: 40px;font-weight:500;cursor:pointer"
       >
         TAREA 1
       </div>
@@ -28,6 +29,13 @@ export default {
   data: () => ({
     //
   }),
+  methods: {
+    navigate() {
+      if (!(this.$route.path === '/')) {
+        this.$router.push('/');
+      }
+    }
+  }
 };
 </script>
 

@@ -12,10 +12,12 @@
             class="justify-center mt-7"
             style="color:white;font-size:30px"
         >
-            {{ this.series }}
+            {{ series }}
         </v-row>
 
-        <v-expansion-panels class="my-10"
+        <v-expansion-panels
+            v-model="panel"
+            class="my-10"
             style="max-width:500px"
         >
             <v-expansion-panel
@@ -69,10 +71,12 @@
 import axios from 'axios';
 
 export default {
+    props: ['season'],
     data: () => ({
         loading: true,
         seasons: [],
         seasonEpisodes: {},
+        panel: null,
     }),
     computed: {
         series() {
@@ -81,7 +85,6 @@ export default {
     },
     methods: {
         navigate(episode_id) {
-            console.log(episode_id)
             this.$router.push(`episode/${episode_id}`);
         },
     },
@@ -110,6 +113,9 @@ export default {
                     })
                 }
             });
+            if (this.$route.params) {
+                this.panel = this.$route.params.season - 1;
+            }
         })
         .catch((error) => {
             console.log(error);

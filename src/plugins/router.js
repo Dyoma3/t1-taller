@@ -17,11 +17,13 @@ const router = new VueRouter({
       path: '/breakingBad',
       name: 'Breaking Bad',
       component: Series,
+      props: true,
     },
     {
       path: '/betterCallSaul',
       name: 'Better Call Saul',
       component: Series,
+      props: true,
     },
     {
       path: '/episode/:id',
