@@ -24,12 +24,12 @@
         color="#e50914"
         placeholder="Buscar personaje"
         outlined
-        :class="[$vuetify.breakpoint.xs ? 'mr-2' : 'mr-7', 'mt-5']"
+        :class="[$vuetify.breakpoint.xs ? 'mr-2' : 'mr-7', 'mt-6']"
         v-model="character"
         :items="candidates"
         item-text="name"
         item-value="name"
-        :style="{maxWidth: $vuetify.breakpoint.xs ? '200px' : '400px'}"
+        :style="{maxWidth: $vuetify.breakpoint.xs ? '180px' : '400px'}"
         @update:search-input="searchCharacter"
       >
         <template v-slot:item="data">
@@ -112,7 +112,7 @@ export default {
 }
 .mobile-title {
   color: #e50914;
-  font-size: 24px;
+  font-size: 22px;
   font-weight:500;
   cursor:pointer;
 }
