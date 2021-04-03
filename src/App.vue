@@ -1,28 +1,47 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app>
+    <v-app-bar
+      app
+      color="#0e0e0e"
+      dark
+    >
+      <div
+        @click="navigate"
+        class="ml-10"
+        style="color: #e50914;font-size: 40px;font-weight:500;cursor:pointer"
+      >
+        TAREA 1
+      </div>
+
+      <v-spacer></v-spacer>
+    </v-app-bar>
+
+    <v-main style="background-color:#2b2727">
+      <router-view />
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  data: () => ({
+    //
+  }),
+  methods: {
+    navigate() {
+      if (!(this.$route.path === '/')) {
+        this.$router.push('/');
+      }
+    }
   }
-}
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+.title{
+  color: #e50914;
+  font-size: 60px;
 }
 </style>
