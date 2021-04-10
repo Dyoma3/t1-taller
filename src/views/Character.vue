@@ -118,6 +118,33 @@
                     </a>
                 </v-hover>
             </v-row>
+            <v-expansion-panels>
+                <v-expansion-panel
+                    class="mt-7"
+                    style="background-color:#2b2727;"
+                >
+                    <v-expansion-panel-header style="color:#e4e4e4">
+                        <v-row justify="center" style="font-size:21px">
+                            Frases
+                        </v-row>
+                        <template v-slot:actions>
+                            <v-icon color="white">
+                                mdi-menu-down
+                            </v-icon>
+                        </template>
+                    </v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                        <v-row
+                            v-for="(quote, i) in characterQuotes"
+                            :key="i"
+                            class="my-2"
+                            style="color:#e4e4e4"
+                        >
+                            -{{ quote.quote }}
+                        </v-row>
+                    </v-expansion-panel-content>
+                </v-expansion-panel>
+            </v-expansion-panels>
         </v-card>
     </v-container>
 </template>
@@ -128,7 +155,8 @@ export default {
     data: () => ({
         loading: true,
         characterData: null,
-        error: false
+        error: false,
+        characterQuotes: [],
     }),
     computed: {
         occupations() {
@@ -152,6 +180,14 @@ export default {
                 } else {
                     this.characterData = result.data[0];
                     this.error = false;
+                    axios({
+                        method: 'get',
+                        url: `https://tarea-1-breaking-bad.herokuapp.com/api/quote/?author=${this.$route.params.name}`,
+                    }).then((result) => {
+                        this.characterQuotes = result.data;
+                    }).catch(() => {
+                        this.error = true;
+                    });
                 }
             })
             .catch(() => {
@@ -180,6 +216,14 @@ export default {
                 this.error = true;
             } else {
                 this.characterData = result.data[0];
+                axios({
+                    method: 'get',
+                    url: `https://tarea-1-breaking-bad.herokuapp.com/api/quote/?author=${this.$route.params.name}`,
+                }).then((result) => {
+                    this.characterQuotes = result.data;
+                }).catch(() => {
+                    this.error = true;
+                });
             }
         })
         .catch(() => {

@@ -84,7 +84,7 @@
                 class="d-flex flex-column align-center"
                 style="background-color:#0e0e0e;position:relative">
                     <v-img
-                        v-if="selectedCharacterData"
+                        v-if="selectedCharacterData && !characterError"
                         contain
                         height="200px"
                         :src="selectedCharacterData.img"
@@ -214,6 +214,33 @@
                             </a>
                         </v-hover>
                     </v-row>
+                    <v-expansion-panels>
+                        <v-expansion-panel
+                            class="mt-7"
+                            style="background-color:#0e0e0e;"
+                        >
+                            <v-expansion-panel-header style="color:#e4e4e4">
+                                <v-row justify="center" style="font-size:21px">
+                                    Frases
+                                </v-row>
+                                <template v-slot:actions>
+                                    <v-icon color="white">
+                                        mdi-menu-down
+                                    </v-icon>
+                                </template>
+                            </v-expansion-panel-header>
+                            <v-expansion-panel-content>
+                                <v-row
+                                    v-for="(quote, i) in characterQuotes"
+                                    :key="i"
+                                    class="my-2"
+                                    style="color:#e4e4e4"
+                                >
+                                    -{{ quote.quote }}
+                                </v-row>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
+                    </v-expansion-panels>
                 </div>
             </v-container>
         </v-dialog>
@@ -246,6 +273,7 @@ export default {
         characterVisible: false,
         selectedCharacterData: null,
         characterError: false,
+        characterQuotes: [],
     }),
     computed: {
         date() {
@@ -284,6 +312,14 @@ export default {
                     this.characterError = true;
                 } else {
                     this.selectedCharacterData = result.data[0];
+                    axios({
+                        method: 'get',
+                        url: `https://tarea-1-breaking-bad.herokuapp.com/api/quote/?author=${character}`,
+                    }).then((result) => {
+                        this.characterQuotes = result.data;
+                    }).catch(() => {
+                        this.characterError = true;
+                    });
                 }
             })
             .catch(() => {
