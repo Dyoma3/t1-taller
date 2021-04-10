@@ -118,7 +118,7 @@
                     </a>
                 </v-hover>
             </v-row>
-            <v-expansion-panels>
+            <v-expansion-panels v-if="characterQuotes.length">
                 <v-expansion-panel
                     class="mt-7"
                     style="background-color:#2b2727;"
