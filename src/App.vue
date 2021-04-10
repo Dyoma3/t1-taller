@@ -35,14 +35,29 @@
         @update:search-input="searchValue = $event"
       >
         <template v-slot:item="data">
-          <template>
-            <v-list-item-avatar>
-              <img :src="data.item.img">
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title v-html="data.item.name"></v-list-item-title>
-            </v-list-item-content>
-          </template>
+          <v-list-item-avatar>
+            <img :src="data.item.img">
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title v-html="data.item.name"></v-list-item-title>
+          </v-list-item-content>
+        </template>
+        <template v-if="shouldLoadMore || error" v-slot:append-item
+        >
+          <v-row
+            v-if="error"
+            class="ma-0 pt-2 justify-center align-center"
+          >
+            Ha habido un error al cargar los datos
+          </v-row>
+          <v-row
+            v-else
+            class="ma-0 pt-2 justify-center align-center"
+            style="cursor:pointer"
+            v-observe-visibility="(isVisible) => loadMore(isVisible)"
+          >
+            Cargando...
+          </v-row>
         </template>
       </v-autocomplete>
     </v-app-bar>
@@ -63,17 +78,54 @@ export default {
     loading: false,
     character: '',
     candidates: [],
-    searchValue: ',a,a',
+    searchValue: '',
+    scrolledToBottom: false,
+    offset: 10,
+    shouldLoadMore: false,
+    error: false,
   }),
+  computed: {
+    couldLoad() {
+      return true;
+    },
+  },
   methods: {
     navigate() {
       if (!(this.$route.path === '/')) {
         this.$router.push('/');
       }
     },
+    loadMore(isVisible) {
+      if (isVisible && this.shouldLoadMore) {
+        this.scrolledToBottom = true;
+        axios({
+          method: 'get',
+          url: `https://tarea-1-breaking-bad.herokuapp.com/api/characters/?name=${this.searchValue}&offset=${this.offset}`,
+        }).then((response) => {
+          this.candidates = [
+            ...this.candidates,
+            ...response.data,
+          ];
+          if (response.data.length === 10) {
+            this.shouldLoadMore = true;
+            this.offset += 10
+          } else {
+            this.shouldLoadMore = false;
+          }
+          this.scrolledToBottom = false;
+        }).catch(() => {
+          this.error = true;
+        })
+
+      }
+    }
   },
   watch: {
     searchValue: _.debounce(function (value) {
+      // reset parameters
+      this.scrolledToBottom = false;
+      this.offset = 10;
+      this.shouldLoadMore = false;
       if (!value || value === '') {
         this.candidates = [];
         return;
@@ -84,6 +136,9 @@ export default {
           url: `https://tarea-1-breaking-bad.herokuapp.com/api/characters/?name=${value}`,
       }).then((response) => {
         this.candidates = response.data;
+        if (this.candidates.length === 10) {
+          this.shouldLoadMore = true;
+        }
       })
       .catch(() => {
         this.error = true;
