@@ -111,7 +111,7 @@
                         }"
                     >
                         {{ 
-                            i === characterData.appearance.length - 1
+                            i === characterData.better_call_saul_appearance.length - 1
                             ? season
                             :`${season},`
                         }}
