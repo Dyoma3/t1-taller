@@ -122,7 +122,7 @@ export default {
                 }
             });
             if (this.$route.params) {
-                this.panel = this.$route.params.season - 1;
+                this.panel = this.seasons.indexOf(`${this.$route.params.season}`);
             }
         })
         .catch(() => {
